@@ -30,11 +30,11 @@ export function IconGenerator() {
     <div className="space-y-6 lg:grid lg:grid-cols-[2fr_3fr] lg:gap-8 lg:space-y-0">
       {/* 左カラム */}
       <div className="space-y-6">
-        <section className="rounded-xl border border-purple-200 bg-white p-6 shadow-sm">
+        <section className="rounded-xl border bg-card p-6 shadow-sm">
           <IconGeneratorForm onGenerated={handleGenerated} />
         </section>
 
-        <section className="rounded-xl border border-purple-200 bg-white p-6 shadow-sm">
+        <section className="rounded-xl border bg-card p-6 shadow-sm">
           <IconHistory onSelect={handleSelectHistory} />
         </section>
       </div>
@@ -43,14 +43,14 @@ export function IconGenerator() {
       <div className="space-y-6 lg:sticky lg:top-24 lg:h-fit">
         {icon ? (
           <>
-            <section className="rounded-xl border border-purple-200 bg-purple-50 p-6 shadow-sm">
-              <h2 className="mb-4 font-semibold text-lg text-purple-900">
+            <section className="rounded-xl border bg-muted p-6 shadow-sm">
+              <h2 className="mb-4 font-semibold text-lg">
                 生成結果: {currentPrompt}
               </h2>
               <IconPreview icon={icon} />
             </section>
 
-            <section className="rounded-xl border border-purple-200 bg-white p-6 shadow-sm">
+            <section className="rounded-xl border bg-card p-6 shadow-sm">
               <Tabs defaultValue="download">
                 <TabsList className="mb-6 w-full">
                   <TabsTrigger value="download" className="flex-1">
@@ -70,8 +70,8 @@ export function IconGenerator() {
             </section>
           </>
         ) : (
-          <section className="hidden rounded-xl border border-purple-200 bg-purple-50 p-6 shadow-sm lg:block">
-            <p className="text-center text-purple-600">
+          <section className="hidden rounded-xl border bg-muted p-6 shadow-sm lg:block">
+            <p className="text-center text-muted-foreground">
               アイコンを生成すると、ここに結果が表示されます
             </p>
           </section>
