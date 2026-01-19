@@ -44,8 +44,23 @@ export function OgpGenerator({ icon }: Props) {
         img.onload = resolve;
       });
 
-      const iconSize = 96; // フォントサイズ64pxの1.5倍
-      const iconX = 120;
+      // フォントサイズとサイズ計算（比例）
+      const fontSize = 80;
+      const iconSize = fontSize * 1.5; // 120px
+      const spacing = fontSize; // 80px
+      const lineHeight = fontSize * 1.25; // 100px
+
+      // テキスト幅を測定して中央揃え位置を計算
+      ctx.font = `bold ${fontSize}px sans-serif`;
+      const lines = appName.split("\n");
+      const maxTextWidth = Math.max(
+        ...lines.map((line) => ctx.measureText(line).width),
+      );
+
+      // 全体の幅を計算して中央に配置
+      const contentWidth = iconSize + spacing + maxTextWidth;
+      const startX = (canvas.width - contentWidth) / 2;
+      const iconX = startX;
       const iconY = (canvas.height - iconSize) / 2;
 
       // Apple風の角丸（約22.37%）を適用
@@ -84,22 +99,15 @@ export function OgpGenerator({ icon }: Props) {
 
       // アプリ名を右側に配置（改行対応）
       ctx.fillStyle = "#000000";
-      const fontSize = 64;
-      ctx.font = `bold ${fontSize}px sans-serif`;
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
 
-      const textX = iconX + iconSize + fontSize; // フォントサイズ1文字分の余白
-      const maxWidth = canvas.width - textX - fontSize;
-      const lineHeight = 80;
-
-      // テキストを改行で分割
-      const lines = appName.split("\n");
+      const textX = iconX + iconSize + spacing;
       const startY = canvas.height / 2 - ((lines.length - 1) * lineHeight) / 2;
 
       lines.forEach((line, index) => {
         const y = startY + index * lineHeight;
-        ctx.fillText(line, textX, y, maxWidth);
+        ctx.fillText(line, textX, y);
       });
 
       setOgpPreview(canvas.toDataURL());
