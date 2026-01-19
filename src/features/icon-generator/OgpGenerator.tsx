@@ -84,12 +84,13 @@ export function OgpGenerator({ icon }: Props) {
 
       // アプリ名を右側に配置（改行対応）
       ctx.fillStyle = "#000000";
-      ctx.font = "bold 64px sans-serif";
+      const fontSize = 64;
+      ctx.font = `bold ${fontSize}px sans-serif`;
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
 
-      const textX = iconX + iconSize + 100;
-      const maxWidth = canvas.width - textX - 100;
+      const textX = iconX + iconSize + fontSize; // フォントサイズ1文字分の余白
+      const maxWidth = canvas.width - textX - fontSize;
       const lineHeight = 80;
 
       // テキストを改行で分割
@@ -130,13 +131,12 @@ export function OgpGenerator({ icon }: Props) {
       {ogpPreview && (
         <div className="space-y-2">
           <p className="text-gray-500 text-sm">プレビュー (1200x630)</p>
-          <div className="overflow-hidden rounded border">
+          <div className="inline-block overflow-hidden rounded border">
             <Image
               src={ogpPreview}
               alt="OGP Preview"
               width={1200}
               height={630}
-              className="w-full"
               unoptimized
             />
           </div>
