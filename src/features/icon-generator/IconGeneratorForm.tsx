@@ -106,6 +106,7 @@ export function IconGeneratorForm({ onGenerated }: Props) {
       </div>
 
       <Button
+        variant="gradient"
         onClick={handleGenerate}
         disabled={loading || !prompt.trim() || !apiKey.trim()}
       >

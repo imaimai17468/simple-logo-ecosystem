@@ -151,7 +151,11 @@ export function OgpGenerator({ icon }: Props) {
         </div>
       )}
 
-      <Button onClick={handleGenerateOgp} disabled={!ogpPreview}>
+      <Button
+        variant="gradient"
+        onClick={handleGenerateOgp}
+        disabled={!ogpPreview}
+      >
         OGP画像をダウンロード
       </Button>
     </div>

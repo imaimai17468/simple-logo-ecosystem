@@ -67,19 +67,22 @@ export function IconHistory({ onSelect }: Props) {
           すべて削除
         </Button>
       </div>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-1 xl:grid-cols-2">
         {history.map((item) => (
-          <div key={item.id} className="flex flex-col gap-2 rounded border p-3">
+          <div
+            key={item.id}
+            className="group flex flex-col gap-2 rounded-lg border border-purple-100 bg-white p-3 transition-all hover:border-purple-300 hover:shadow-md"
+          >
             <button
               type="button"
-              className="flex flex-col gap-2 transition-opacity hover:opacity-80"
+              className="flex flex-col gap-2 transition-transform hover:scale-[1.02]"
               onClick={() => onSelect(item)}
             >
               <Image
                 src={`data:${item.icon.mimeType};base64,${item.icon.base64}`}
                 alt={item.prompt}
-                width={100}
-                height={100}
+                width={80}
+                height={80}
                 className="aspect-square w-full border object-cover"
                 style={{ borderRadius: "22.37%" }}
                 unoptimized
@@ -95,6 +98,7 @@ export function IconHistory({ onSelect }: Props) {
               size="sm"
               variant="ghost"
               onClick={() => handleDelete(item.id)}
+              className="text-purple-600 hover:text-purple-700"
             >
               削除
             </Button>
