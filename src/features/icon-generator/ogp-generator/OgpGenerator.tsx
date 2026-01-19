@@ -41,20 +41,27 @@ export function OgpGenerator({ icon }: IconComponentProps) {
         rows={3}
       />
 
-      {ogpPreview && (
-        <div className="space-y-2">
-          <p className="text-gray-500 text-sm">プレビュー (1200x630)</p>
-          <div className="inline-block overflow-hidden rounded border">
-            <Image
-              src={ogpPreview}
-              alt="OGP Preview"
-              width={1200}
-              height={630}
-              unoptimized
-            />
-          </div>
+      <div className="space-y-2">
+        <p className="text-gray-500 text-sm">プレビュー (1200x630)</p>
+        <div className="flex min-h-40 flex-col items-center justify-center rounded border bg-gray-50 p-6">
+          {ogpPreview ? (
+            <div className="w-full overflow-hidden rounded border bg-white">
+              <Image
+                src={ogpPreview}
+                alt="OGP Preview"
+                width={1200}
+                height={630}
+                className="h-auto w-full"
+                unoptimized
+              />
+            </div>
+          ) : (
+            <p className="text-center text-gray-400 text-sm">
+              アプリ名を入力するとプレビューが表示されます
+            </p>
+          )}
         </div>
-      )}
+      </div>
 
       <Button
         variant="gradient"
