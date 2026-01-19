@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { GeneratedIcon } from "@/entities/icon";
-import { addToHistory } from "./IconHistory";
+import { addToHistory } from "../icon-history/addToHistory";
 
 interface Props {
   onGenerated: (icon: GeneratedIcon, prompt: string) => void;
@@ -16,18 +16,13 @@ const API_KEY_STORAGE_KEY = "gemini_api_key";
 export function IconGeneratorForm({ onGenerated }: Props) {
   const apiKeyId = useId();
   const promptId = useId();
-  const [apiKey, setApiKey] = useState("");
+  const [apiKey, setApiKey] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return localStorage.getItem(API_KEY_STORAGE_KEY) || "";
+  });
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // LocalStorage からAPI Keyを読み込み
-  useEffect(() => {
-    const savedKey = localStorage.getItem(API_KEY_STORAGE_KEY);
-    if (savedKey) {
-      setApiKey(savedKey);
-    }
-  }, []);
 
   // API Keyを保存
   const handleSaveApiKey = () => {

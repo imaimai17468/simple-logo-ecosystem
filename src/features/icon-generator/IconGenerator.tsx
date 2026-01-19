@@ -5,11 +5,11 @@ import type {
   GeneratedIcon,
   IconHistory as IconHistoryType,
 } from "@/entities/icon";
-import { IconDownloader } from "./IconDownloader";
-import { IconGeneratorForm } from "./IconGeneratorForm";
-import { IconHistory } from "./IconHistory";
-import { IconPreview } from "./IconPreview";
-import { OgpGenerator } from "./OgpGenerator";
+import { IconDownloader } from "./icon-downloader/IconDownloader";
+import { IconGeneratorForm } from "./icon-generator-form/IconGeneratorForm";
+import { IconHistory } from "./icon-history/IconHistory";
+import { IconPreview } from "./icon-preview/IconPreview";
+import { OgpGenerator } from "./ogp-generator/OgpGenerator";
 
 export function IconGenerator() {
   const [icon, setIcon] = useState<GeneratedIcon | null>(null);

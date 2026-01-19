@@ -1,38 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { IconHistory as IconHistoryType } from "@/entities/icon";
+import { deleteHistoryItem, saveHistoryToStorage } from "./deleteHistoryItem";
+import { loadHistoryFromStorage } from "./loadHistoryFromStorage";
 
 interface Props {
   onSelect: (history: IconHistoryType) => void;
 }
 
 const HISTORY_STORAGE_KEY = "icon_generation_history";
-const MAX_HISTORY = 10;
 
 export function IconHistory({ onSelect }: Props) {
-  const [history, setHistory] = useState<IconHistoryType[]>([]);
-
-  const loadHistory = useCallback(() => {
-    const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved) as IconHistoryType[];
-        setHistory(parsed);
-      } catch (e) {
-        console.error("Failed to load history", e);
-      }
-    }
-  }, []);
+  const [history, setHistory] = useState<IconHistoryType[]>(() =>
+    loadHistoryFromStorage(),
+  );
 
   useEffect(() => {
-    loadHistory();
-
-    // カスタムイベントをリスンして履歴を自動リロード
     const handleHistoryUpdate = () => {
-      loadHistory();
+      setHistory(loadHistoryFromStorage());
     };
 
     window.addEventListener("icon-history-updated", handleHistoryUpdate);
@@ -40,12 +28,12 @@ export function IconHistory({ onSelect }: Props) {
     return () => {
       window.removeEventListener("icon-history-updated", handleHistoryUpdate);
     };
-  }, [loadHistory]);
+  }, []);
 
   const handleDelete = (id: string) => {
-    const newHistory = history.filter((h) => h.id !== id);
+    const newHistory = deleteHistoryItem(history, id);
     setHistory(newHistory);
-    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(newHistory));
+    saveHistoryToStorage(newHistory);
   };
 
   const handleClearAll = () => {
@@ -130,40 +118,4 @@ export function IconHistory({ onSelect }: Props) {
       )}
     </div>
   );
-}
-
-// 履歴に追加するユーティリティ関数
-export function addToHistory(
-  prompt: string,
-  icon: { base64: string; mimeType: string },
-) {
-  const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
-  let history: IconHistoryType[] = [];
-
-  if (saved) {
-    try {
-      history = JSON.parse(saved) as IconHistoryType[];
-    } catch (e) {
-      console.error("Failed to load history", e);
-    }
-  }
-
-  const newItem: IconHistoryType = {
-    id: crypto.randomUUID(),
-    prompt,
-    icon,
-    createdAt: new Date().toISOString(),
-  };
-
-  history.unshift(newItem);
-
-  // 最大件数を超えたら古いものを削除
-  if (history.length > MAX_HISTORY) {
-    history = history.slice(0, MAX_HISTORY);
-  }
-
-  localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
-
-  // カスタムイベントを発火して他のコンポーネントに通知
-  window.dispatchEvent(new Event("icon-history-updated"));
 }
