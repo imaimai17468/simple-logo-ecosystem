@@ -4,15 +4,11 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import type { GeneratedIcon } from "@/entities/icon";
+import type { IconComponentProps } from "../types";
 import { downloadDataUrl } from "./downloadDataUrl";
 import { generateOgpImage } from "./generateOgpImage";
 
-interface Props {
-  icon: GeneratedIcon;
-}
-
-export function OgpGenerator({ icon }: Props) {
+export function OgpGenerator({ icon }: IconComponentProps) {
   const [appName, setAppName] = useState("");
   const [ogpPreview, setOgpPreview] = useState<string | null>(null);
 

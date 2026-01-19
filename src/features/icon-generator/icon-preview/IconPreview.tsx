@@ -1,13 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import type { GeneratedIcon } from "@/entities/icon";
+import type { IconComponentProps } from "../types";
 
-interface Props {
-  icon: GeneratedIcon;
-}
-
-export function IconPreview({ icon }: Props) {
+export function IconPreview({ icon }: IconComponentProps) {
   const dataUrl = `data:${icon.mimeType};base64,${icon.base64}`;
 
   return (

@@ -3,18 +3,15 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import type { GeneratedIcon, IconSize } from "@/entities/icon";
+import type { IconSize } from "@/entities/icon";
+import type { IconComponentProps } from "../types";
 import { downloadIconAsBlob } from "./downloadIconAsBlob";
 import { generateIconPreviews } from "./generateIconPreviews";
 import { resizeIcon } from "./resizeIcon";
 
-interface Props {
-  icon: GeneratedIcon;
-}
-
 const SIZES: IconSize[] = [16, 32, 180, 192];
 
-export function IconDownloader({ icon }: Props) {
+export function IconDownloader({ icon }: IconComponentProps) {
   const [previews, setPreviews] = useState<Record<number, string>>({});
 
   useEffect(() => {
