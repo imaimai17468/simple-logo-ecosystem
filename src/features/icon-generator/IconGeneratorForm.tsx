@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { GeneratedIcon } from "@/entities/icon";
+import { addToHistory } from "./IconHistory";
 
 interface Props {
-  onGenerated: (icon: GeneratedIcon) => void;
+  onGenerated: (icon: GeneratedIcon, prompt: string) => void;
 }
 
 const API_KEY_STORAGE_KEY = "gemini_api_key";
@@ -54,7 +55,8 @@ export function IconGeneratorForm({ onGenerated }: Props) {
       const data = await response.json();
 
       if (data.success && data.image) {
-        onGenerated(data.image);
+        addToHistory(prompt, data.image);
+        onGenerated(data.image, prompt);
       } else {
         setError(data.error || "生成に失敗しました");
       }

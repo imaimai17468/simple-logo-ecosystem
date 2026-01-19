@@ -19,3 +19,10 @@ export interface IconGenerationError {
   message: string;
   code?: string;
 }
+
+export interface IconHistory {
+  id: string;
+  prompt: string;
+  icon: GeneratedIcon;
+  createdAt: string;
+}
