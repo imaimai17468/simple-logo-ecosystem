@@ -1,14 +1,34 @@
+import { OGP_FONTS, type OgpFont } from "./ogpFonts";
+import { OGP_THEMES, type OgpTheme } from "./ogpThemes";
+
+export type OgpLayout = "horizontal" | "vertical";
+
 export interface OgpImageParams {
   iconDataUrl: string;
   appName: string;
   width: number;
   height: number;
+  theme?: OgpTheme;
+  layout?: OgpLayout;
+  iconSize?: number;
+  fontSize?: number;
+  font?: OgpFont;
 }
 
 export async function generateOgpImage(
   params: OgpImageParams,
 ): Promise<string> {
-  const { iconDataUrl, appName, width, height } = params;
+  const {
+    iconDataUrl,
+    appName,
+    width,
+    height,
+    theme = "light",
+    layout = "horizontal",
+    iconSize: customIconSize,
+    fontSize: customFontSize,
+    font = "sans-serif",
+  } = params;
 
   const canvas = document.createElement("canvas");
   canvas.width = width;
@@ -17,8 +37,11 @@ export async function generateOgpImage(
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Failed to get canvas context");
 
+  // テーマの色を取得
+  const colors = OGP_THEMES[theme];
+
   // 背景
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = colors.background;
   ctx.fillRect(0, 0, width, height);
 
   // アイコンを読み込み
@@ -28,24 +51,47 @@ export async function generateOgpImage(
     img.onload = resolve;
   });
 
-  // フォントサイズとサイズ計算
-  const fontSize = 80;
-  const iconSize = fontSize * 1.5;
+  // フォント設定を取得
+  const fontConfig = OGP_FONTS.find((f) => f.value === font);
+  const fontFamily = fontConfig?.fontFamily || "sans-serif";
+
+  // サイズ計算
+  const fontSize = customFontSize || 80;
+  const iconSize = customIconSize || fontSize * 1.5;
   const spacing = fontSize;
   const lineHeight = fontSize * 1.25;
 
   // テキスト幅を測定
-  ctx.font = `bold ${fontSize}px sans-serif`;
+  ctx.font = `bold ${fontSize}px ${fontFamily}`;
   const lines = appName.split("\n");
   const maxTextWidth = Math.max(
     ...lines.map((line) => ctx.measureText(line).width),
   );
 
-  // 中央揃え位置を計算
-  const contentWidth = iconSize + spacing + maxTextWidth;
-  const startX = (width - contentWidth) / 2;
-  const iconX = startX;
-  const iconY = (height - iconSize) / 2;
+  // レイアウトに応じた位置計算
+  let iconX: number;
+  let iconY: number;
+  let textX: number;
+  let textY: number;
+
+  if (layout === "horizontal") {
+    // 横並び：アイコン左・テキスト右
+    const contentWidth = iconSize + spacing + maxTextWidth;
+    const startX = (width - contentWidth) / 2;
+    iconX = startX;
+    iconY = (height - iconSize) / 2;
+    textX = iconX + iconSize + spacing;
+    textY = height / 2 - ((lines.length - 1) * lineHeight) / 2;
+  } else {
+    // 縦並び：アイコン上・テキスト下
+    const textHeight = lines.length * lineHeight;
+    const contentHeight = iconSize + spacing + textHeight;
+    const startY = (height - contentHeight) / 2;
+    iconX = (width - iconSize) / 2;
+    iconY = startY;
+    textX = width / 2;
+    textY = iconY + iconSize + spacing;
+  }
 
   // Apple風の角丸を描画
   const radius = iconSize * 0.2237;
@@ -82,17 +128,25 @@ export async function generateOgpImage(
   ctx.restore();
 
   // テキストを描画
-  ctx.fillStyle = "#000000";
-  ctx.textAlign = "left";
-  ctx.textBaseline = "middle";
+  ctx.fillStyle = colors.text;
 
-  const textX = iconX + iconSize + spacing;
-  const startY = height / 2 - ((lines.length - 1) * lineHeight) / 2;
-
-  lines.forEach((line, index) => {
-    const y = startY + index * lineHeight;
-    ctx.fillText(line, textX, y);
-  });
+  if (layout === "horizontal") {
+    // 横並び：各行を中央基準で描画
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    lines.forEach((line, index) => {
+      const y = textY + index * lineHeight;
+      ctx.fillText(line, textX, y);
+    });
+  } else {
+    // 縦並び：各行を上基準で描画
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    lines.forEach((line, index) => {
+      const y = textY + index * lineHeight;
+      ctx.fillText(line, textX, y);
+    });
+  }
 
   return canvas.toDataURL();
 }
