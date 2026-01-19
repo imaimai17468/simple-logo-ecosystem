@@ -44,22 +44,30 @@ export function OgpGenerator({ icon }: Props) {
         img.onload = resolve;
       });
 
-      const iconSize = 400;
-      const iconX = 100;
+      const iconSize = 280;
+      const iconX = 120;
       const iconY = (canvas.height - iconSize) / 2;
 
       ctx.drawImage(img, iconX, iconY, iconSize, iconSize);
 
-      // アプリ名を右側に配置
+      // アプリ名を右側に配置（改行対応）
       ctx.fillStyle = "#000000";
-      ctx.font = "bold 72px sans-serif";
+      ctx.font = "bold 64px sans-serif";
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
 
-      const textX = iconX + iconSize + 80;
-      const textY = canvas.height / 2;
+      const textX = iconX + iconSize + 100;
+      const maxWidth = canvas.width - textX - 100;
+      const lineHeight = 80;
 
-      ctx.fillText(appName, textX, textY);
+      // テキストを改行で分割
+      const lines = appName.split("\n");
+      const startY = canvas.height / 2 - ((lines.length - 1) * lineHeight) / 2;
+
+      lines.forEach((line, index) => {
+        const y = startY + index * lineHeight;
+        ctx.fillText(line, textX, y, maxWidth);
+      });
 
       setOgpPreview(canvas.toDataURL());
     };

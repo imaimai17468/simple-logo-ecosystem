@@ -11,7 +11,7 @@ export async function generateIconWithGemini(
   });
 
   const result = await model.generateContent(
-    `Create a simple, clean icon for: ${prompt}. The icon should be suitable for use as an app icon or favicon.`,
+    `Create a simple, clean icon for: ${prompt}. Design it with a solid background color and the icon element filling the entire space edge-to-edge. Avoid nested circles, frames, or borders within the icon. The design should be tightly fitted without any surrounding decorative elements. The icon should be suitable for use as an app icon or favicon.`,
   );
 
   const response = result.response;

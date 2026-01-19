@@ -93,7 +93,7 @@ export function IconDownloader({ icon }: Props) {
                 alt={`${size}x${size} preview`}
                 width={size}
                 height={size}
-                className="border bg-gray-50"
+                className="rounded-lg border bg-gray-50"
                 unoptimized
               />
             )}
