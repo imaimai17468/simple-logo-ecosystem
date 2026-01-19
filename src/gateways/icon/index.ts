@@ -11,7 +11,16 @@ export async function generateIconWithGemini(
   });
 
   const result = await model.generateContent(
-    `Create a simple, clean icon for: ${prompt}. Design it with a solid background color and the icon element filling the entire space edge-to-edge. Avoid nested circles, frames, or borders within the icon. The design should be tightly fitted without any surrounding decorative elements. The icon should be suitable for use as an app icon or favicon.`,
+    `Create a simple, clean app icon for: ${prompt}.
+
+CRITICAL REQUIREMENTS:
+- Use ONE SINGLE solid color background that fills the entire image (no white background, no outer layer)
+- The icon element should be drawn DIRECTLY on this single background color
+- NO nested backgrounds, NO inner squares, NO double layers, NO frames
+- The icon design should extend edge-to-edge within the single colored background
+- Think of it like a mobile app icon: one background color with the icon drawn on top
+
+Style: Modern, minimalist, suitable for app icons and favicons.`,
   );
 
   const response = result.response;
