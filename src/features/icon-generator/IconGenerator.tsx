@@ -27,7 +27,7 @@ export function IconGenerator() {
   };
 
   return (
-    <div className="space-y-6 lg:grid lg:grid-cols-[40%_60%] lg:gap-8 lg:space-y-0">
+    <div className="space-y-6 lg:grid lg:grid-cols-[2fr_3fr] lg:gap-8 lg:space-y-0">
       {/* 左カラム */}
       <div className="space-y-6">
         <section className="rounded-xl border border-purple-200 bg-white p-6 shadow-sm">
