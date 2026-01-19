@@ -6,6 +6,22 @@ import { ThemeProvider } from "@/components/shared/theme-provider/ThemeProvider"
 export const metadata: Metadata = {
   title: "Simple Icon Ecosystem",
   description: "AIでアイコンとOGP画像を生成",
+  openGraph: {
+    title: "Simple Icon Ecosystem",
+    description: "AIでアイコンとOGP画像を生成",
+    images: ["/ogp-image.png"],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Simple Icon Ecosystem",
+    description: "AIでアイコンとOGP画像を生成",
+    images: ["/ogp-image.png"],
+  },
+  icons: {
+    icon: [{ url: "/icon-192x192.png", sizes: "192x192", type: "image/png" }],
+    apple: "/icon-192x192.png",
+  },
 };
 
 export default function RootLayout({
