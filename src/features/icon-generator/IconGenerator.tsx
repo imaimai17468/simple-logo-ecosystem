@@ -42,7 +42,7 @@ export function IconGenerator() {
       <div className="space-y-6 lg:sticky lg:top-24 lg:h-fit">
         {icon ? (
           <>
-            <section className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 p-6 shadow-sm">
+            <section className="rounded-xl border border-purple-200 bg-purple-50 p-6 shadow-sm">
               <h2 className="mb-4 font-semibold text-lg text-purple-900">
                 生成結果: {currentPrompt}
               </h2>
@@ -58,7 +58,7 @@ export function IconGenerator() {
             </section>
           </>
         ) : (
-          <section className="hidden rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 p-6 shadow-sm lg:block">
+          <section className="hidden rounded-xl border border-purple-200 bg-purple-50 p-6 shadow-sm lg:block">
             <p className="text-center text-purple-600">
               アイコンを生成すると、ここに結果が表示されます
             </p>

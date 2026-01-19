@@ -3,7 +3,7 @@ import { ModeToggle } from "@/components/shared/mode-toggle/ModeToggle";
 
 export const Header = () => {
   return (
-    <header className="sticky top-0 z-50 h-16 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500">
+    <header className="sticky top-0 z-50 h-16 bg-purple-600">
       <div className="container mx-auto flex h-full items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm">
@@ -21,18 +21,6 @@ export const Header = () => {
           </h1>
         </Link>
         <div className="flex items-center gap-5">
-          <Link
-            href="/link1"
-            className="text-sm text-white/80 hover:text-white"
-          >
-            Link1
-          </Link>
-          <Link
-            href="/link2"
-            className="text-sm text-white/80 hover:text-white"
-          >
-            Link2
-          </Link>
           <ModeToggle />
         </div>
       </div>
