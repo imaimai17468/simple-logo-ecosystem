@@ -18,7 +18,8 @@ export function IconPreview({ icon }: Props) {
         alt="Generated icon"
         width={384}
         height={384}
-        className="max-w-xs rounded-2xl border"
+        className="max-w-xs border"
+        style={{ borderRadius: "22.37%" }}
         unoptimized
       />
     </div>

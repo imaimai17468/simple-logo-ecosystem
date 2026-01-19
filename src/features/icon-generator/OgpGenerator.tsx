@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import type { GeneratedIcon } from "@/entities/icon";
 
 interface Props {
@@ -44,11 +44,43 @@ export function OgpGenerator({ icon }: Props) {
         img.onload = resolve;
       });
 
-      const iconSize = 280;
+      const iconSize = 96; // フォントサイズ64pxの1.5倍
       const iconX = 120;
       const iconY = (canvas.height - iconSize) / 2;
 
+      // Apple風の角丸（約22.37%）を適用
+      const radius = iconSize * 0.2237;
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(iconX + radius, iconY);
+      ctx.lineTo(iconX + iconSize - radius, iconY);
+      ctx.quadraticCurveTo(
+        iconX + iconSize,
+        iconY,
+        iconX + iconSize,
+        iconY + radius,
+      );
+      ctx.lineTo(iconX + iconSize, iconY + iconSize - radius);
+      ctx.quadraticCurveTo(
+        iconX + iconSize,
+        iconY + iconSize,
+        iconX + iconSize - radius,
+        iconY + iconSize,
+      );
+      ctx.lineTo(iconX + radius, iconY + iconSize);
+      ctx.quadraticCurveTo(
+        iconX,
+        iconY + iconSize,
+        iconX,
+        iconY + iconSize - radius,
+      );
+      ctx.lineTo(iconX, iconY + radius);
+      ctx.quadraticCurveTo(iconX, iconY, iconX + radius, iconY);
+      ctx.closePath();
+      ctx.clip();
+
       ctx.drawImage(img, iconX, iconY, iconSize, iconSize);
+      ctx.restore();
 
       // アプリ名を右側に配置（改行対応）
       ctx.fillStyle = "#000000";
@@ -88,10 +120,11 @@ export function OgpGenerator({ icon }: Props) {
   return (
     <div className="space-y-4">
       <h3 className="font-medium text-lg">OGP画像生成</h3>
-      <Input
+      <Textarea
         value={appName}
         onChange={(e) => setAppName(e.target.value)}
-        placeholder="アプリ名を入力"
+        placeholder="アプリ名を入力（改行可）"
+        rows={3}
       />
 
       {ogpPreview && (

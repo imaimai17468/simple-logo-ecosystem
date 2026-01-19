@@ -80,7 +80,8 @@ export function IconHistory({ onSelect }: Props) {
                 alt={item.prompt}
                 width={100}
                 height={100}
-                className="aspect-square w-full rounded-lg border object-cover"
+                className="aspect-square w-full border object-cover"
+                style={{ borderRadius: "22.37%" }}
                 unoptimized
               />
               <p className="line-clamp-2 text-left text-gray-600 text-xs">
