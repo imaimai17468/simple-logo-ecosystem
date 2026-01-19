@@ -1,14 +1,15 @@
-# Supabaseを使わない場合のセットアップガイド
+# データベース・認証機能を使わない場合のセットアップガイド
 
-このテンプレートはSupabase認証を含んでいますが、認証機能が不要な場合は以下の手順で削除できます。
+このテンプレートはSupabase認証とDrizzle ORMを含んでいますが、データベースや認証機能が不要な場合は以下の手順で削除できます。
 
 ## 削除する機能
 
-Supabaseを削除すると、以下の機能が利用できなくなります：
+データベース・認証機能を削除すると、以下の機能が利用できなくなります：
 - ユーザー認証（ログイン/ログアウト）
 - プロフィール管理
 - アバター画像のアップロード
 - ユーザー固有のデータ管理
+- データベース操作（Drizzle ORM）
 
 ## 削除手順
 
@@ -19,7 +20,10 @@ Supabaseを削除すると、以下の機能が利用できなくなります：
 rm -rf src/app/login
 rm -rf src/app/auth
 rm -rf src/app/profile
-rm -rf src/app/actions/profile.ts
+
+# 認証関連のアクション
+rm -rf src/actions/auth.ts
+rm -rf src/actions/profile.ts
 
 # Supabase関連のライブラリ
 rm -rf src/lib/supabase
@@ -36,15 +40,28 @@ rm -rf src/components/features/profile-page
 
 # Supabase設定
 rm -rf supabase
+
+# Drizzle ORM関連
+rm -rf src/lib/drizzle
+rm -f drizzle.config.ts
 ```
 
 ### 2. 依存関係の削除
 
-`package.json`から以下のパッケージを削除：
+`package.json`から以下のパッケージとスクリプトを削除：
 
+**パッケージの削除：**
 ```bash
-bun remove @supabase/supabase-js @supabase/ssr
+bun remove @supabase/supabase-js @supabase/ssr supabase drizzle-orm drizzle-kit postgres
 ```
+
+**スクリプトの削除（package.jsonから手動で削除）：**
+- `db:typegen`（Supabase型生成）
+- `supabase:push`（Supabaseへのプッシュ）
+- `db:generate`（Drizzleマイグレーション生成）
+- `db:push`（Drizzleマイグレーション適用）
+- `db:studio`（Drizzle Studio起動）
+- `db:pull`（Drizzleスキーマ取得）
 
 ### 3. ヘッダーコンポーネントの簡略化
 
@@ -52,10 +69,11 @@ bun remove @supabase/supabase-js @supabase/ssr
 
 ```tsx
 import Link from "next/link";
+import { ModeToggle } from "@/components/shared/mode-toggle/ModeToggle";
 
 export const Header = () => {
   return (
-    <header className="fixed top-0 right-0 left-0 z-50">
+    <header className="sticky top-0 z-50 bg-transparent backdrop-blur-md">
       <div className="flex items-center justify-between px-6 py-6">
         <div>
           <h1 className="font-medium text-2xl">
@@ -69,12 +87,15 @@ export const Header = () => {
           <Link href="/link2" className="text-gray-400 text-sm">
             Link2
           </Link>
+          <ModeToggle />
         </div>
       </div>
     </header>
   );
 };
 ```
+
+**注意**: テーマ切り替え機能（`ModeToggle`）は認証とは関係ないため、残すことを推奨します。不要な場合は削除してください。
 
 ### 4. 環境変数の削除
 
@@ -156,7 +177,11 @@ A: はい、このドキュメントの手順を逆に実行するか、Supabase
 
 ### Q: データベースは必要ですか？
 
-A: Supabaseを削除すると、データベース機能も削除されます。別途データベースが必要な場合は、Prismaなどの ORMと組み合わせて使用できます。
+A: このガイドではSupabaseとDrizzle ORMの両方を削除します。別途データベースが必要な場合は、PrismaなどのORMを導入したり、Drizzle ORMを残して別のデータベース（PostgreSQL、MySQLなど）と組み合わせて使用できます。
+
+### Q: Drizzle ORMだけ残すことは可能ですか？
+
+A: はい、Supabase認証だけを削除してDrizzle ORMを残すことも可能です。その場合は、Drizzle関連のファイルとパッケージは削除せず、別のPostgreSQLデータベース（Neon、Vercel Postgres、自前のPostgreSQLなど）に接続してください。
 
 ## 注意事項
 
