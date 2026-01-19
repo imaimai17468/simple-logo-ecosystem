@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type {
   GeneratedIcon,
   IconHistory as IconHistoryType,
@@ -50,11 +51,22 @@ export function IconGenerator() {
             </section>
 
             <section className="rounded-xl border border-purple-200 bg-white p-6 shadow-sm">
-              <IconDownloader icon={icon} />
-            </section>
-
-            <section className="rounded-xl border border-purple-200 bg-white p-6 shadow-sm">
-              <OgpGenerator icon={icon} />
+              <Tabs defaultValue="download">
+                <TabsList className="mb-6 w-full">
+                  <TabsTrigger value="download" className="flex-1">
+                    アイコンダウンロード
+                  </TabsTrigger>
+                  <TabsTrigger value="ogp" className="flex-1">
+                    OGP画像生成
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="download">
+                  <IconDownloader icon={icon} />
+                </TabsContent>
+                <TabsContent value="ogp">
+                  <OgpGenerator icon={icon} />
+                </TabsContent>
+              </Tabs>
             </section>
           </>
         ) : (
