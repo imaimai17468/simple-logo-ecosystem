@@ -37,7 +37,7 @@ export function OgpGenerator({ icon }: Props) {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // アイコンを左側に配置
-      const img = new Image();
+      const img = new window.Image();
       img.src = dataUrl;
 
       await new Promise((resolve) => {

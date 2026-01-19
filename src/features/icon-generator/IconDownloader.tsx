@@ -18,7 +18,7 @@ export function IconDownloader({ icon }: Props) {
   useEffect(() => {
     const generatePreviews = async () => {
       const dataUrl = `data:${icon.mimeType};base64,${icon.base64}`;
-      const img = new Image();
+      const img = new window.Image();
       img.src = dataUrl;
 
       await new Promise((resolve) => {
@@ -49,7 +49,7 @@ export function IconDownloader({ icon }: Props) {
     const dataUrl = `data:${icon.mimeType};base64,${icon.base64}`;
 
     // Canvas でリサイズ
-    const img = new Image();
+    const img = new window.Image();
     img.src = dataUrl;
 
     await new Promise((resolve) => {

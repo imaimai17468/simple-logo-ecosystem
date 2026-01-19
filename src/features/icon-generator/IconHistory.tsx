@@ -69,35 +69,35 @@ export function IconHistory({ onSelect }: Props) {
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {history.map((item) => (
-          <button
-            type="button"
-            key={item.id}
-            className="flex cursor-pointer flex-col gap-2 rounded border p-3 text-left transition-colors hover:border-gray-400"
-            onClick={() => onSelect(item)}
-          >
-            <Image
-              src={`data:${item.icon.mimeType};base64,${item.icon.base64}`}
-              alt={item.prompt}
-              width={100}
-              height={100}
-              className="aspect-square w-full rounded border object-cover"
-              unoptimized
-            />
-            <p className="line-clamp-2 text-gray-600 text-xs">{item.prompt}</p>
-            <p className="text-gray-400 text-xs">
-              {new Date(item.createdAt).toLocaleDateString("ja-JP")}
-            </p>
+          <div key={item.id} className="flex flex-col gap-2 rounded border p-3">
+            <button
+              type="button"
+              className="flex flex-col gap-2 transition-opacity hover:opacity-80"
+              onClick={() => onSelect(item)}
+            >
+              <Image
+                src={`data:${item.icon.mimeType};base64,${item.icon.base64}`}
+                alt={item.prompt}
+                width={100}
+                height={100}
+                className="aspect-square w-full rounded border object-cover"
+                unoptimized
+              />
+              <p className="line-clamp-2 text-left text-gray-600 text-xs">
+                {item.prompt}
+              </p>
+              <p className="text-left text-gray-400 text-xs">
+                {new Date(item.createdAt).toLocaleDateString("ja-JP")}
+              </p>
+            </button>
             <Button
               size="sm"
               variant="ghost"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDelete(item.id);
-              }}
+              onClick={() => handleDelete(item.id)}
             >
               削除
             </Button>
-          </button>
+          </div>
         ))}
       </div>
     </div>
