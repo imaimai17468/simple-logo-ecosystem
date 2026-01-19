@@ -1,11 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { IconGenerator } from "@/features/icon-generator/IconGenerator";
 
-export default function Home() {
-  return (
-    <div className="space-y-16">
-      <h1 className="font-bold text-4xl">Hello World</h1>
-      <p className="text-lg">This is a test</p>
-      <Button>Click me</Button>
-    </div>
-  );
+export const metadata = {
+  title: "アイコン生成 | Simple Icon Ecosystem",
+  description: "AIでアイコンとOGP画像を生成",
+};
+
+export default function IconGeneratorPage() {
+  return <IconGenerator />;
 }
