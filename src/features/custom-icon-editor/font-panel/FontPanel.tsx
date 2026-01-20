@@ -70,12 +70,19 @@ export function FontPanel({ text, onTextChange }: FontPanelProps) {
           value={text.fontFamily}
           onValueChange={(fontFamily) => onTextChange({ ...text, fontFamily })}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger
+            className="w-full"
+            style={{ fontFamily: text.fontFamily }}
+          >
             <SelectValue placeholder="フォントを選択" />
           </SelectTrigger>
           <SelectContent>
             {FONT_FAMILY_OPTIONS.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
+              <SelectItem
+                key={option.value}
+                value={option.value}
+                style={{ fontFamily: option.value }}
+              >
                 {option.label}
               </SelectItem>
             ))}
