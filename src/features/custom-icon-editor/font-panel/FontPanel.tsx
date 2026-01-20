@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import type { TextConfig } from "@/entities/custom-icon";
+import { ColorPicker } from "../color-picker/ColorPicker";
 
 const FONT_FAMILY_OPTIONS = [
   { value: "system-ui, sans-serif", label: "システムフォント" },
@@ -101,6 +102,20 @@ export function FontPanel({ text, onTextChange }: FontPanelProps) {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <Label>カラー</Label>
+        <ColorPicker
+          color={text.color}
+          onChange={(color) => onTextChange({ ...text, color })}
+        >
+          <button
+            type="button"
+            className="h-10 w-full rounded border-2 border-gray-200 hover:border-gray-400"
+            style={{ backgroundColor: text.color }}
+          />
+        </ColorPicker>
       </div>
     </div>
   );
