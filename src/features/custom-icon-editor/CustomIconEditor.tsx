@@ -19,6 +19,7 @@ export function CustomIconEditor() {
     DEFAULT_CUSTOM_ICON_CONFIG,
   );
   const [isEditingText, setIsEditingText] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -80,7 +81,12 @@ export function CustomIconEditor() {
             className="pointer-events-auto cursor-text border-none bg-transparent p-0"
             onClick={handleCanvasClick}
           >
-            <IconCanvas config={config} ref={canvasRef} />
+            <IconCanvas
+              config={config}
+              ref={canvasRef}
+              isEditingText={isEditingText}
+              cursorPosition={cursorPosition}
+            />
           </button>
           <div className="absolute inset-0">
             <GradientHandles
@@ -96,6 +102,7 @@ export function CustomIconEditor() {
               onChange={handleTextChange}
               isEditing={isEditingText}
               onBlur={() => setIsEditingText(false)}
+              onCursorPositionChange={setCursorPosition}
             />
           </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import type { CustomIconConfig } from "@/entities/custom-icon";
 import { renderBorder } from "./renderBorder";
 import { renderGradient } from "./renderGradient";
@@ -9,13 +9,31 @@ import { renderText } from "./renderText";
 
 interface IconCanvasProps {
   config: CustomIconConfig;
+  isEditingText?: boolean;
+  cursorPosition?: number;
 }
 
 export const IconCanvas = forwardRef<HTMLCanvasElement, IconCanvasProps>(
-  ({ config }, ref) => {
+  ({ config, isEditingText = false, cursorPosition = 0 }, ref) => {
     const internalRef = useRef<HTMLCanvasElement>(null);
     const canvasRef =
       (ref as React.RefObject<HTMLCanvasElement>) || internalRef;
+    const [showCursor, setShowCursor] = useState(true);
+
+    // カーソル点滅
+    useEffect(() => {
+      if (!isEditingText) {
+        setShowCursor(false);
+        return;
+      }
+
+      setShowCursor(true);
+      const interval = setInterval(() => {
+        setShowCursor((prev) => !prev);
+      }, 500);
+
+      return () => clearInterval(interval);
+    }, [isEditingText]);
 
     useEffect(() => {
       const canvas = canvasRef.current;
@@ -57,7 +75,10 @@ export const IconCanvas = forwardRef<HTMLCanvasElement, IconCanvasProps>(
       }
 
       // 3. Render text (if present)
-      renderText(ctx, config.iconSize, config.text);
+      renderText(ctx, config.iconSize, config.text, {
+        showCursor: isEditingText && showCursor,
+        cursorPosition,
+      });
 
       // 4. Render border (if enabled) - inside clip
       if (config.border.enabled) {
@@ -65,7 +86,7 @@ export const IconCanvas = forwardRef<HTMLCanvasElement, IconCanvasProps>(
       }
 
       ctx.restore();
-    }, [config, canvasRef.current]);
+    }, [config, isEditingText, showCursor, cursorPosition, canvasRef.current]);
 
     return (
       <canvas

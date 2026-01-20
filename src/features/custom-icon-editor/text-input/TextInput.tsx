@@ -8,6 +8,7 @@ interface TextInputProps {
   onChange: (value: string) => void;
   isEditing: boolean;
   onBlur: () => void;
+  onCursorPositionChange?: (position: number) => void;
 }
 
 export function TextInput({
@@ -15,6 +16,7 @@ export function TextInput({
   onChange,
   isEditing,
   onBlur,
+  onCursorPositionChange,
 }: TextInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -24,6 +26,12 @@ export function TextInput({
     }
   }, [isEditing]);
 
+  const handleSelectionChange = () => {
+    if (textareaRef.current && onCursorPositionChange) {
+      onCursorPositionChange(textareaRef.current.selectionStart);
+    }
+  };
+
   if (!isEditing) return null;
 
   return (
@@ -31,10 +39,17 @@ export function TextInput({
       <Textarea
         ref={textareaRef}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value);
+          handleSelectionChange();
+        }}
         onBlur={onBlur}
         onMouseDown={(e) => e.stopPropagation()}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleSelectionChange();
+        }}
+        onKeyUp={handleSelectionChange}
         placeholder="テキストを入力..."
         className="w-64 resize-none border-none bg-transparent text-center text-transparent caret-transparent shadow-none placeholder:text-white/50 focus-visible:outline-none focus-visible:ring-0"
         rows={3}
