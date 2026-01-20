@@ -34,8 +34,29 @@ export function TextInput({
 
   if (!isEditing) return null;
 
+  const handleFocus = () => {
+    textareaRef.current?.focus();
+  };
+
   return (
-    <div className="pointer-events-auto absolute inset-0 flex items-center justify-center">
+    <>
+      {/* Canvas上をクリック可能にするための透明オーバーレイ */}
+      <button
+        type="button"
+        className="pointer-events-auto absolute inset-0 cursor-text bg-transparent"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleFocus();
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleFocus();
+          }
+        }}
+        aria-label="テキスト入力エリア"
+      />
+      {/* 画面外に配置したTextArea（IME入力用） */}
       <Textarea
         ref={textareaRef}
         value={value}
@@ -44,16 +65,11 @@ export function TextInput({
           handleSelectionChange();
         }}
         onBlur={onBlur}
-        onMouseDown={(e) => e.stopPropagation()}
-        onClick={(e) => {
-          e.stopPropagation();
-          handleSelectionChange();
-        }}
         onKeyUp={handleSelectionChange}
-        placeholder="テキストを入力..."
-        className="w-64 resize-none border-none bg-transparent text-center text-transparent caret-transparent shadow-none placeholder:text-white/50 focus-visible:outline-none focus-visible:ring-0"
+        placeholder=""
+        className="-left-[9999px] pointer-events-auto absolute w-64 resize-none"
         rows={3}
       />
-    </div>
+    </>
   );
 }
