@@ -1,4 +1,4 @@
-export type IconSize = 16 | 32 | 180 | 192;
+export type IconSize = 16 | 32 | 64 | 96 | 128 | 180 | 192;
 
 export interface GeneratedIcon {
   base64: string;

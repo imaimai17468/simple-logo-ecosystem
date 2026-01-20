@@ -1,5 +1,7 @@
 "use client";
 
+import JSZip from "jszip";
+import { Download } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +13,7 @@ import { generateIconPreviews } from "./generateIconPreviews";
 import { resizeIcon } from "./resizeIcon";
 import { validateIconSize } from "./validateIconSize";
 
-const SIZES: IconSize[] = [16, 32, 180, 192];
+const SIZES: IconSize[] = [32, 64, 96, 128];
 
 export function IconDownloader({ icon }: IconComponentProps) {
   const [previews, setPreviews] = useState<Record<number, string>>({});
@@ -61,6 +63,32 @@ export function IconDownloader({ icon }: IconComponentProps) {
     setCustomPreview(null);
   };
 
+  const handleBatchDownload = async () => {
+    const zip = new JSZip();
+    const dataUrl = `data:${icon.mimeType};base64,${icon.base64}`;
+
+    const blobPromises = SIZES.map(async (size) => {
+      const resized = await resizeIcon(dataUrl, size);
+      const response = await fetch(resized);
+      const blob = await response.blob();
+      return { size, blob };
+    });
+
+    const results = await Promise.all(blobPromises);
+
+    for (const { size, blob } of results) {
+      zip.file(`icon-${size}x${size}.png`, blob);
+    }
+
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(zipBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "icons.zip";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -95,6 +123,14 @@ export function IconDownloader({ icon }: IconComponentProps) {
             </div>
           ))}
         </div>
+        <Button
+          variant="outline"
+          onClick={handleBatchDownload}
+          className="w-full"
+        >
+          <Download className="mr-2 h-4 w-4" />
+          まとめてダウンロード (32, 64, 96, 128px)
+        </Button>
       </div>
 
       <div className="border-t pt-6">
