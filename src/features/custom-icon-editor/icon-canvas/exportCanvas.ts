@@ -1,6 +1,7 @@
 import type { CustomIconConfig } from "@/entities/custom-icon";
 import { renderBorder } from "./renderBorder";
 import { renderGradient } from "./renderGradient";
+import { renderShape } from "./renderShape";
 import { renderText } from "./renderText";
 
 export function exportCanvas(
@@ -47,6 +48,16 @@ export function exportCanvas(
     },
   ];
   renderGradient(ctx, size, scaledHandles);
+
+  // Render shape if enabled
+  if (config.shape.enabled) {
+    const scaledShape = {
+      ...config.shape,
+      strokeWidth: config.shape.strokeWidth * scale,
+      // size and rotation don't need scaling (size is already a ratio, rotation is degrees)
+    };
+    renderShape(ctx, size, scaledShape);
+  }
 
   // Render text with scaled font size
   const scaledText = {

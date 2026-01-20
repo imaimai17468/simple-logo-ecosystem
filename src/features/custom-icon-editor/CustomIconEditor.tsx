@@ -11,6 +11,7 @@ import { FontPanel } from "./font-panel/FontPanel";
 import { GradientHandles } from "./gradient-handles/GradientHandles";
 import { IconCanvas } from "./icon-canvas/IconCanvas";
 import { PreviewPanel } from "./preview-panel/PreviewPanel";
+import { ShapePanel } from "./shape-panel/ShapePanel";
 import { TextInput } from "./text-input/TextInput";
 
 export function CustomIconEditor() {
@@ -59,6 +60,10 @@ export function CustomIconEditor() {
     setConfig((prev) => ({ ...prev, text }));
   };
 
+  const handleShapeChange = (shape: typeof config.shape) => {
+    setConfig((prev) => ({ ...prev, shape }));
+  };
+
   return (
     <div className="grid h-[calc(100dvh-200px)] grid-cols-[auto_1fr_auto] items-center gap-8 px-8">
       {/* Left: Preview & Download Panels */}
@@ -103,6 +108,7 @@ export function CustomIconEditor() {
           onBorderChange={handleBorderChange}
         />
         <FontPanel text={config.text} onTextChange={handleTextConfigChange} />
+        <ShapePanel shape={config.shape} onShapeChange={handleShapeChange} />
       </div>
     </div>
   );

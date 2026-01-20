@@ -11,6 +11,17 @@ export interface BorderConfig {
   width: number; // px
 }
 
+export type ShapeType = "rectangle" | "triangle" | "circle";
+
+export interface ShapeConfig {
+  enabled: boolean;
+  type: ShapeType;
+  color: string;
+  strokeWidth: number; // px
+  size: number; // 0.1-1.0 (iconSizeに対する比率)
+  rotation: number; // 0-360 degrees
+}
+
 export interface TextConfig {
   content: string;
   fontSize: number;
@@ -23,6 +34,7 @@ export interface CustomIconConfig {
   iconSize: number;
   gradientHandles: [GradientHandle, GradientHandle];
   border: BorderConfig;
+  shape: ShapeConfig;
   text: TextConfig;
 }
 
@@ -36,6 +48,14 @@ export const DEFAULT_CUSTOM_ICON_CONFIG: CustomIconConfig = {
     enabled: false,
     color: "#000000",
     width: 4,
+  },
+  shape: {
+    enabled: false,
+    type: "rectangle",
+    color: "#FFFFFF",
+    strokeWidth: 4,
+    size: 0.65,
+    rotation: 0,
   },
   text: {
     content: "",

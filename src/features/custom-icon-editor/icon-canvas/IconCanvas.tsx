@@ -4,6 +4,7 @@ import { forwardRef, useEffect, useRef } from "react";
 import type { CustomIconConfig } from "@/entities/custom-icon";
 import { renderBorder } from "./renderBorder";
 import { renderGradient } from "./renderGradient";
+import { renderShape } from "./renderShape";
 import { renderText } from "./renderText";
 
 interface IconCanvasProps {
@@ -50,10 +51,15 @@ export const IconCanvas = forwardRef<HTMLCanvasElement, IconCanvasProps>(
       // 1. Render gradient
       renderGradient(ctx, config.iconSize, config.gradientHandles);
 
-      // 2. Render text (if present)
+      // 2. Render shape (if enabled)
+      if (config.shape.enabled) {
+        renderShape(ctx, config.iconSize, config.shape);
+      }
+
+      // 3. Render text (if present)
       renderText(ctx, config.iconSize, config.text);
 
-      // 3. Render border (if enabled) - inside clip
+      // 4. Render border (if enabled) - inside clip
       if (config.border.enabled) {
         renderBorder(ctx, config.iconSize, radius, config.border);
       }
