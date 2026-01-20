@@ -34,6 +34,7 @@ function Slider({
         "relative flex w-full touch-none select-none items-center data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col data-[disabled]:opacity-50",
         className,
       )}
+      onPointerDown={(e) => e.stopPropagation()}
       {...props}
     >
       <SliderPrimitive.Track
@@ -49,11 +50,11 @@ function Slider({
           )}
         />
       </SliderPrimitive.Track>
-      {_values.map((thumbValue) => (
+      {_values.map((thumbValue, index) => (
         <SliderPrimitive.Thumb
           data-slot="slider-thumb"
-          key={`thumb-${thumbValue}`}
-          className="block size-4 shrink-0 rounded-full border border-primary bg-background shadow-sm ring-ring/50 transition-[color,box-shadow] hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 disabled:pointer-events-none disabled:opacity-50"
+          key={`slider-thumb-${index}-${thumbValue}`}
+          className="block size-4 shrink-0 cursor-grab rounded-full border border-primary bg-background shadow-sm ring-ring/50 transition-[color,box-shadow] hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 active:cursor-grabbing disabled:pointer-events-none disabled:opacity-50"
         />
       ))}
     </SliderPrimitive.Root>
