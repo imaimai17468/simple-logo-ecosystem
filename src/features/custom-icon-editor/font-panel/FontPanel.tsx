@@ -58,7 +58,7 @@ export function FontPanel({ text, onTextChange }: FontPanelProps) {
           value={[text.fontSize]}
           onValueChange={([fontSize]) => onTextChange({ ...text, fontSize })}
           min={12}
-          max={120}
+          max={240}
           step={1}
         />
       </div>
