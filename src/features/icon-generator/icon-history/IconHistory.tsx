@@ -54,9 +54,9 @@ export function IconHistory({ onSelect }: Props) {
         )}
       </div>
       {history.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border-2 border-purple-200 border-dashed bg-purple-50/30 px-6 py-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-lg border-2 border-purple-200 border-dashed bg-purple-50/30 px-6 py-12 text-center dark:border-purple-800 dark:bg-purple-950/30">
           <svg
-            className="mb-4 h-12 w-12 text-purple-300"
+            className="mb-4 h-12 w-12 text-purple-300 dark:text-purple-600"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -69,10 +69,10 @@ export function IconHistory({ onSelect }: Props) {
               d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <p className="mb-2 font-medium text-purple-900">
+          <p className="mb-2 font-medium text-purple-900 dark:text-purple-100">
             まだ履歴がありません
           </p>
-          <p className="text-purple-600 text-sm">
+          <p className="text-purple-600 text-sm dark:text-purple-300">
             アイコンを生成すると、ここに履歴が表示されます
           </p>
         </div>
