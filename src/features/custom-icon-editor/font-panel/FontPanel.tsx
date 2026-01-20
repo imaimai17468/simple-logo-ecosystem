@@ -23,6 +23,13 @@ const FONT_FAMILY_OPTIONS = [
   { value: '"Times New Roman", serif', label: "Times New Roman" },
   { value: '"Courier New", monospace', label: "Courier New" },
   {
+    value: '"Brush Script MT", "Apple Chancery", cursive',
+    label: "Brush Script MT",
+  },
+  { value: '"Lucida Handwriting", cursive', label: "Lucida Handwriting" },
+  { value: '"Comic Sans MS", "Comic Sans", cursive', label: "Comic Sans MS" },
+  { value: "cursive", label: "Cursive" },
+  {
     value:
       '"Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic Medium", YuGothic, sans-serif',
     label: "ヒラギノ角ゴシック",
