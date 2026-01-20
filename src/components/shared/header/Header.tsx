@@ -21,6 +21,14 @@ export const Header = () => {
           </h1>
         </Link>
         <div className="flex items-center gap-5">
+          <nav className="flex items-center gap-6">
+            <Link
+              href="/custom-icon"
+              className="text-white transition-colors hover:text-white/80"
+            >
+              Custom Icon
+            </Link>
+          </nav>
           <ModeToggle />
         </div>
       </div>
