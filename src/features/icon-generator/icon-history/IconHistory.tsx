@@ -14,11 +14,12 @@ interface Props {
 const HISTORY_STORAGE_KEY = "icon_generation_history";
 
 export function IconHistory({ onSelect }: Props) {
-  const [history, setHistory] = useState<IconHistoryType[]>(() =>
-    loadHistoryFromStorage(),
-  );
+  const [history, setHistory] = useState<IconHistoryType[]>([]);
 
   useEffect(() => {
+    // クライアント側でのみLocalStorageから読み込む
+    setHistory(loadHistoryFromStorage());
+
     const handleHistoryUpdate = () => {
       setHistory(loadHistoryFromStorage());
     };

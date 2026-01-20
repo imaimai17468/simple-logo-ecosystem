@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -31,6 +31,26 @@ const PRESET_COLORS = [
 ];
 
 export function ColorPicker({ color, onChange, children }: ColorPickerProps) {
+  const [hexInput, setHexInput] = useState(color);
+
+  // 外部からcolorが変更された時にhexInputを同期
+  useEffect(() => {
+    setHexInput(color);
+  }, [color]);
+
+  const handleHexChange = (value: string) => {
+    setHexInput(value);
+    // 有効なカラーコード（#RRGGBB形式）の場合のみ親に通知
+    if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+      onChange(value);
+    }
+  };
+
+  const handleColorChange = (value: string) => {
+    setHexInput(value);
+    onChange(value);
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
@@ -42,15 +62,15 @@ export function ColorPicker({ color, onChange, children }: ColorPickerProps) {
           <Input
             type="color"
             value={color}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => handleColorChange(e.target.value)}
             className="h-12 w-full cursor-pointer"
           />
 
           {/* Hex input for manual entry */}
           <Input
             type="text"
-            value={color}
-            onChange={(e) => onChange(e.target.value)}
+            value={hexInput}
+            onChange={(e) => handleHexChange(e.target.value)}
             placeholder="#8B5CF6"
             pattern="^#[0-9A-Fa-f]{6}$"
           />
@@ -65,7 +85,7 @@ export function ColorPicker({ color, onChange, children }: ColorPickerProps) {
                   key={presetColor}
                   className="h-8 w-8 rounded border-2 border-gray-200 hover:border-gray-400"
                   style={{ backgroundColor: presetColor }}
-                  onClick={() => onChange(presetColor)}
+                  onClick={() => handleColorChange(presetColor)}
                   title={presetColor}
                 />
               ))}
