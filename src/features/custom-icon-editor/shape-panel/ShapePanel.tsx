@@ -55,7 +55,7 @@ export function ShapePanel({ shape, onShapeChange }: ShapePanelProps) {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between gap-2">
             <Label>カラー</Label>
             <ColorPicker
               color={shape.color}
@@ -63,7 +63,7 @@ export function ShapePanel({ shape, onShapeChange }: ShapePanelProps) {
             >
               <button
                 type="button"
-                className="h-10 w-full rounded border-2 border-gray-200 hover:border-gray-400"
+                className="h-10 w-24 rounded border-2 border-gray-200 hover:border-gray-400"
                 style={{ backgroundColor: shape.color }}
               />
             </ColorPicker>
