@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { GeneratedIcon } from "@/entities/icon";
-import { addToHistory } from "../icon-history/addToHistory";
+import {
+  addToHistory,
+  checkImageSize,
+  checkStorageAvailability,
+} from "../icon-history/addToHistory";
 
 interface Props {
   onGenerated: (icon: GeneratedIcon, prompt: string) => void;
@@ -23,6 +27,7 @@ export function IconGeneratorForm({ onGenerated }: Props) {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [warning, setWarning] = useState<string | null>(null);
 
   // API Keyを保存
   const handleSaveApiKey = () => {
@@ -34,11 +39,21 @@ export function IconGeneratorForm({ onGenerated }: Props) {
   const handleGenerate = async () => {
     if (!prompt.trim() || !apiKey.trim()) return;
 
+    // 生成前にストレージの空き容量をチェック
+    const storage = checkStorageAvailability();
+    if (!storage.canStore) {
+      setWarning(
+        `履歴の容量がいっぱいです（${storage.currentSizeKB}KB / ${storage.historyCount}件）。新しいアイコンを履歴に保存するには、古い履歴を削除してください。`,
+      );
+      // 容量不足でも生成は続行可能（履歴に保存されないだけ）
+    }
+
     // API Keyを保存
     handleSaveApiKey();
 
     setLoading(true);
     setError(null);
+    // 容量警告は残す（クリアボタンのため）
 
     try {
       const response = await fetch("/api/generate-icon", {
@@ -50,13 +65,28 @@ export function IconGeneratorForm({ onGenerated }: Props) {
       const data = await response.json();
 
       if (data.success && data.image) {
+        // 生成された画像のサイズをチェック
+        const sizeCheck = checkImageSize(data.image.base64);
+
+        // 画像が大きすぎる場合は警告を表示
+        if (sizeCheck.isTooBig) {
+          setWarning(
+            `生成された画像が大きすぎるため、履歴に保存できませんでした (${sizeCheck.sizeMB}MB)。アイコンは正常に使用できますが、履歴には残りません。`,
+          );
+        }
+
+        // 履歴に保存を試みる（大きすぎる場合は内部でスキップされる）
         addToHistory(prompt, data.image);
+
+        // アイコンは必ず表示
         onGenerated(data.image, prompt);
       } else {
         setError(data.error || "生成に失敗しました");
       }
-    } catch (_err) {
-      setError("エラーが発生しました");
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "エラーが発生しました";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -109,6 +139,7 @@ export function IconGeneratorForm({ onGenerated }: Props) {
       </Button>
 
       {error && <p className="text-red-500 text-sm">{error}</p>}
+      {warning && <p className="text-sm text-yellow-600">⚠️ {warning}</p>}
     </div>
   );
 }
